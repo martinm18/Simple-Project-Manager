@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=ogcsManager'
+      - 'POSTGRES_PASSWORD=password'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5432:5432'
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  ogcsManager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ogcs_manager
+    environment:
+      -SPRING_PROFILES_ACTIVE : docker
+    depends_on:
+      - postgres
+    ports:
+      - '8081:8080'
+
+
+volumes:
+  postgres_data:
